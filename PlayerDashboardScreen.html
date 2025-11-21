@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .signal-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        
+        .signal-bar {
+            width: 3px;
+            background: #333;
+            border-radius: 1px;
+        }
+        
+        .signal-bar:nth-child(1) { height: 4px; }
+        .signal-bar:nth-child(2) { height: 7px; }
+        .signal-bar:nth-child(3) { height: 10px; }
+        .signal-bar:nth-child(4) { height: 13px; }
+        
+        .battery {
+            width: 24px;
+            height: 12px;
+            border: 2px solid #333;
+            border-radius: 2px;
+            position: relative;
+            padding: 2px;
+        }
+        
+        .battery::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 3px;
+            width: 2px;
+            height: 4px;
+            background: #333;
+            border-radius: 0 1px 1px 0;
+        }
+        
+        .battery-fill {
+            height: 100%;
+            width: 80%;
+            background: #333;
+            border-radius: 1px;
+        }
+        
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(812px - 44px - 84px - 80px);
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .status-card h2 {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .traffic-light {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            position: relative;
+        }
+        
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            border: 4px solid white;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 6px;
+            width: 12px;
+            height: 22px;
+            border: solid white;
+            border-width: 0 4px 4px 0;
+            transform: rotate(45deg);
+        }
+        
+        .status-text {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .status-subtext {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 20px 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-alert {
+            background: #ffebee;
+        }
+        
+        .icon-update {
+            background: #e3f2fd;
+        }
+        
+        .icon-history {
+            background: #f3e5f5;
+        }
+        
+        /* Alert icon (!) */
+        .alert-symbol {
+            width: 4px;
+            height: 16px;
+            background: #f44336;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .alert-symbol::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            background: #f44336;
+            border-radius: 2px;
+        }
+        
+        /* Refresh icon */
+        .refresh-symbol {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #2196F3;
+            border-radius: 50%;
+            border-top-color: transparent;
+            position: relative;
+        }
+        
+        .refresh-symbol::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: -3px;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 8px solid #2196F3;
+            transform: rotate(45deg);
+        }
+        
+        /* Chart icon */
+        .chart-symbol {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 20px;
+        }
+        
+        .bar {
+            width: 4px;
+            background: #9c27b0;
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .bar:nth-child(1) { height: 10px; }
+        .bar:nth-child(2) { height: 16px; }
+        .bar:nth-child(3) { height: 12px; }
+        
+        .action-btn-text {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+        
+        .recent-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .recent-section h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .recent-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .recent-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recent-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .icon-green {
+            background: #e8f5e9;
+        }
+        
+        .icon-blue {
+            background: #e3f2fd;
+        }
+        
+        .icon-orange {
+            background: #fff3e0;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 6px;
+        }
+        
+        .dot-green { background: #4CAF50; }
+        .dot-blue { background: #2196F3; }
+        .dot-orange { background: #FF9800; }
+        
+        .recent-text {
+            flex: 1;
+        }
+        
+        .recent-title {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .recent-date {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #2196F3;
+        }
+        
+        .nav-item.inactive {
+            color: #999;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            position: relative;
+        }
+        
+        /* Home icon */
+        .home-icon {
+            border: 2px solid currentColor;
+            border-bottom-width: 3px;
+            position: relative;
+        }
+        
+        .home-icon::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-bottom: 12px solid currentColor;
+        }
+        
+        /* List icon */
+        .list-icon div {
+            height: 2px;
+            background: currentColor;
+            margin-bottom: 5px;
+            border-radius: 1px;
+        }
+        
+        .list-icon div:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Person icon */
+        .person-icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 7px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+        }
+        
+        .person-icon::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 4px;
+            width: 16px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 8px 8px 0 0;
+            border-bottom: none;
+        }
+        
+        /* Settings icon */
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .settings-icon::before,
+        .settings-icon::after {
+            content: '';
+            position: absolute;
+            background: currentColor;
+        }
+        
+        .settings-icon::before {
+            width: 2px;
+            height: 24px;
+            top: -2px;
+            left: 7px;
+        }
+        
+        .settings-icon::after {
+            width: 24px;
+            height: 2px;
+            left: -2px;
+            top: 7px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div class="signal-icons">
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                    <div class="signal-bar"></div>
+                </div>
+                <div class="battery">
+                    <div class="battery-fill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <h1>Welcome back, Nathan!</h1>
+            <p>Wednesday, November 20, 2024</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Current Status Card -->
+            <div class="status-card">
+                <h2>Your Current Status</h2>
+                <div class="traffic-light">
+                    <div class="checkmark"></div>
+                </div>
+                <div class="status-text">Available to Play</div>
+                <div class="status-subtext">Last updated today at 9:00 AM</div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn">
+                    <div class="action-icon icon-alert">
+                        <div class="alert-symbol"></div>
+                    </div>
+                    <div class="action-btn-text">Report<br>Injury</div>
+                </button>
+                <button class="action-btn">
+                    <div class="action-icon icon-update">
+                        <div class="refresh-symbol"></div>
+                    </div>
+                    <div class="action-btn-text">Update<br>Status</div>
+                </button>
+                <button class="action-btn">
+                    <div class="action-icon icon-history">
+                        <div class="chart-symbol">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    <div class="action-btn-text">View<br>History</div>
+                </button>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="recent-section">
+                <h3>Recent Activity</h3>
+                <div class="recent-item">
+                    <div class="recent-icon icon-green">
+                        <div class="status-dot dot-green"></div>
+                    </div>
+                    <div class="recent-text">
+                        <div class="recent-title">Status updated to Green</div>
+                        <div class="recent-date">Today at 9:00 AM</div>
+                    </div>
+                </div>
+                <div class="recent-item">
+                    <div class="recent-icon icon-blue">
+                        <div class="status-dot dot-blue"></div>
+                    </div>
+                    <div class="recent-text">
+                        <div class="recent-title">Returned to full training</div>
+                        <div class="recent-date">2 days ago</div>
+                    </div>
+                </div>
+                <div class="recent-item">
+                    <div class="recent-icon icon-orange">
+                        <div class="status-dot dot-orange"></div>
+                    </div>
+                    <div class="recent-text">
+                        <div class="recent-title">Ankle sprain reported</div>
+                        <div class="recent-date">1 week ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon home-icon"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item inactive">
+                <div class="nav-icon list-icon">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <span class="nav-label">History</span>
+            </div>
+            <div class="nav-item inactive">
+                <div class="nav-icon person-icon"></div>
+                <span class="nav-label">Profile</span>
+            </div>
+            <div class="nav-item inactive">
+                <div class="nav-icon">
+                    <div class="settings-icon"></div>
+                </div>
+                <span class="nav-label">Settings</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

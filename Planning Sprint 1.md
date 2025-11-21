@@ -78,7 +78,7 @@ ADVANCED FEATURES
 ### CoachTeamDetailsScreen
 
 
-<iframe src="file:///C:/Users/Nathan/Documents/Vault/CoachTeamDetailScreen.html" allow="fullscreen" allowfullscreen="" style="height: 1000px; width: 100%; aspect-ratio: 1/1;"></iframe>
+<iframe src="./CoachTeamDetailScreen.html" allow="fullscreen" allowfullscreen="" style="height: 1000px; width: 100%; aspect-ratio: 1/1;"></iframe>
 
 ### PlayerDashboardScreen
 

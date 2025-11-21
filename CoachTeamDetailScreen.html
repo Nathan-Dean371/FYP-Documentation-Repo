@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Team Detail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+        }
+        
+        .header {
+            background: #2196F3;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .back-arrow {
+            width: 12px;
+            height: 12px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(45deg);
+        }
+        
+        .header-content {
+            flex: 1;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .stats-bar {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .stat-number.green {
+            color: #4CAF50;
+        }
+        
+        .stat-number.orange {
+            color: #FF9800;
+        }
+        
+        .stat-number.red {
+            color: #F44336;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .content {
+            padding: 16px 20px;
+            overflow-y: auto;
+            height: calc(812px - 44px - 68px - 73px - 80px);
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .filter-chip {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .filter-chip.active {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .filter-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .dot-green { background: #4CAF50; }
+        .dot-orange { background: #FF9800; }
+        .dot-red { background: #F44336; }
+        
+        .section-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f5f5f5;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        
+        .player-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .player-card:active {
+            transform: scale(0.98);
+        }
+        
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .player-info {
+            flex: 1;
+        }
+        
+        .player-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .player-position {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .status-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .status-badge.green {
+            background: #e8f5e9;
+        }
+        
+        .status-badge.orange {
+            background: #fff3e0;
+        }
+        
+        .status-badge.red {
+            background: #ffebee;
+        }
+        
+        .status-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+        }
+        
+        .indicator-green {
+            background: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+        
+        .indicator-orange {
+            background: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.3);
+        }
+        
+        .indicator-red {
+            background: #F44336;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
+        }
+        
+        .more-text {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #2196F3;
+        }
+        
+        .nav-item.inactive {
+            color: #999;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            position: relative;
+        }
+        
+        /* Home icon */
+        .home-icon {
+            border: 2px solid currentColor;
+            border-bottom-width: 3px;
+            position: relative;
+        }
+        
+        .home-icon::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-bottom: 12px solid currentColor;
+        }
+        
+        /* Team icon */
+        .team-icon {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+        }
+        
+        .person-small {
+            width: 6px;
+            height: 18px;
+            background: currentColor;
+            border-radius: 3px 3px 0 0;
+            position: relative;
+        }
+        
+        .person-small::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+        
+        .person-small:nth-child(2) {
+            height: 20px;
+        }
+        
+        /* Bell icon */
+        .bell-icon {
+            width: 16px;
+            height: 18px;
+            background: currentColor;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            margin: 2px auto 0;
+        }
+        
+        .bell-icon::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 6px;
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .bell-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 2px;
+            width: 12px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 1px;
+        }
+        
+        /* Settings icon */
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .settings-icon::before,
+        .settings-icon::after {
+            content: '';
+            position: absolute;
+            background: currentColor;
+        }
+        
+        .settings-icon::before {
+            width: 2px;
+            height: 24px;
+            top: -2px;
+            left: 7px;
+        }
+        
+        .settings-icon::after {
+            width: 24px;
+            height: 2px;
+            left: -2px;
+            top: 7px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>Signal & Battery</span>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn">
+                <div class="back-arrow"></div>
+            </div>
+            <div class="header-content">
+                <h1>Senior Men's Rugby</h1>
+                <p>24 players • Rugby Union</p>
+            </div>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number green">18</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number orange">4</div>
+                <div class="stat-label">Limited</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number red">2</div>
+                <div class="stat-label">Injured</div>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-chip active">All</div>
+                <div class="filter-chip">
+                    <div class="filter-dot dot-green"></div>
+                    Available
+                </div>
+                <div class="filter-chip">
+                    <div class="filter-dot dot-orange"></div>
+                    Limited
+                </div>
+                <div class="filter-chip">
+                    <div class="filter-dot dot-red"></div>
+                    Injured
+                </div>
+            </div>
+            
+            <!-- Injured Players Section -->
+            <div class="section-header">
+                Injured
+                <span class="section-badge">
+                    <div class="filter-dot dot-red"></div>
+                    2
+                </span>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">JD</div>
+                <div class="player-info">
+                    <div class="player-name">James Dunne</div>
+                    <div class="player-position">Fly-half • Hamstring strain</div>
+                </div>
+                <div class="status-badge red">
+                    <div class="status-indicator indicator-red"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">MK</div>
+                <div class="player-info">
+                    <div class="player-name">Michael Kelly</div>
+                    <div class="player-position">Prop • Shoulder injury</div>
+                </div>
+                <div class="status-badge red">
+                    <div class="status-indicator indicator-red"></div>
+                </div>
+            </div>
+            
+            <!-- Limited Players Section -->
+            <div class="section-header" style="margin-top: 20px;">
+                Limited Availability
+                <span class="section-badge">
+                    <div class="filter-dot dot-orange"></div>
+                    4
+                </span>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">SO</div>
+                <div class="player-info">
+                    <div class="player-name">Sean O'Brien</div>
+                    <div class="player-position">Flanker • Recovering</div>
+                </div>
+                <div class="status-badge orange">
+                    <div class="status-indicator indicator-orange"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">CR</div>
+                <div class="player-info">
+                    <div class="player-name">Cian Ryan</div>
+                    <div class="player-position">Centre • Light training</div>
+                </div>
+                <div class="status-badge orange">
+                    <div class="status-indicator indicator-orange"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">DM</div>
+                <div class="player-info">
+                    <div class="player-name">Darragh Murphy</div>
+                    <div class="player-position">Winger • Monitoring</div>
+                </div>
+                <div class="status-badge orange">
+                    <div class="status-indicator indicator-orange"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">BW</div>
+                <div class="player-info">
+                    <div class="player-name">Brian Walsh</div>
+                    <div class="player-position">Hooker • Managed load</div>
+                </div>
+                <div class="status-badge orange">
+                    <div class="status-indicator indicator-orange"></div>
+                </div>
+            </div>
+            
+            <!-- Available Players Section -->
+            <div class="section-header" style="margin-top: 20px;">
+                Available
+                <span class="section-badge">
+                    <div class="filter-dot dot-green"></div>
+                    18
+                </span>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">PO</div>
+                <div class="player-info">
+                    <div class="player-name">Patrick O'Connor</div>
+                    <div class="player-position">Scrum-half</div>
+                </div>
+                <div class="status-badge green">
+                    <div class="status-indicator indicator-green"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">LF</div>
+                <div class="player-info">
+                    <div class="player-name">Liam Fitzgerald</div>
+                    <div class="player-position">Lock</div>
+                </div>
+                <div class="status-badge green">
+                    <div class="status-indicator indicator-green"></div>
+                </div>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-avatar">TM</div>
+                <div class="player-info">
+                    <div class="player-name">Tom McCarthy</div>
+                    <div class="player-position">Full-back</div>
+                </div>
+                <div class="status-badge green">
+                    <div class="status-indicator indicator-green"></div>
+                </div>
+            </div>
+            
+            <div class="more-text">
+                + 15 more available players
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item inactive">
+                <div class="nav-icon home-icon"></div>
+                <span class="nav-label">Home</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon team-icon">
+                    <div class="person-small"></div>
+                    <div class="person-small"></div>
+                    <div class="person-small"></div>
+                </div>
+                <span class="nav-label">Teams</span>
+            </div>
+            <div class="nav-item inactive">
+                <div class="nav-icon">
+                    <div class="bell-icon"></div>
+                </div>
+                <span class="nav-label">Alerts</span>
+            </div>
+            <div class="nav-item inactive">
+                <div class="nav-icon">
+                    <div class="settings-icon"></div>
+                </div>
+                <span class="nav-label">Settings</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
