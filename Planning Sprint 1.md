@@ -78,15 +78,15 @@ ADVANCED FEATURES
 ### CoachTeamDetailsScreen
 
 
-![](./test.svg)
+![](./CoachTeamDetailsScreen.svg)
 
 ### PlayerDashboardScreen
 
-<iframe src="file:///C:\Users\Nathan\Documents\Vault\PlayerDashboardScreen.html" allow="fullscreen" allowfullscreen="" style="height: 1000px; width: 100%; aspect-ratio: 1/1;"></iframe>
+![](./PlayerDashboardScreen.svg)
 
 ### PlayerInjuryBodyMapScreen
 
-<iframe src="file:///C:\Users\Nathan\Documents\Vault\PlayerInjuryBodyMapScreen.html" allow="fullscreen" allowfullscreen="" style="height: 1000px; width: 100%; aspect-ratio: 1/1;"></iframe>
+![](./PlayerInjuryBodyMapScreen.svg)
 
 
 # Back-end API endpoints
