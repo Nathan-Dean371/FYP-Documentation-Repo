@@ -98,4 +98,11 @@ Asked Claude to assist in API endpoint visualisation
 # Database Schema
 
 This needs reviewing.
+
+![](./Neo4j-Schema-Interactive.html)
+
+![](./api_endpoints.html)
+
+
+
 <iframe src="file:///C:\Users\Nathan\Documents\Vault\api_endpoints.html" allow="fullscreen" allowfullscreen="" style="height: 100%; width: 100%; aspect-ratio: 1/1;"></iframe>
