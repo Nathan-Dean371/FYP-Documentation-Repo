@@ -211,7 +211,7 @@ See the [Maintenance and Monitoring](neo4j_database_documentation.md#maintenance
 
 ## Project Status
 
-This documentation represents the current state of the Final Year Project as of December 2024. The system is designed to be extensible and supports future enhancements including machine learning integration, wearable device connectivity, and advanced analytics capabilities.
+This documentation represents the current state of the Final Year Project as of December 2025. The system is designed to be extensible and supports future enhancements including machine learning integration, wearable device connectivity, and advanced analytics capabilities.
 
 ---
 
@@ -220,7 +220,7 @@ This documentation represents the current state of the Final Year Project as of 
 **Institution**: Atlantic Technological University  
 **Programme**: Software Engineering  
 **Project Type**: Final Year Project  
-**Academic Year**: 2024-2025
+**Academic Year**: 2025-2025
 
 This repository serves as the comprehensive documentation package for the project, suitable for academic review, technical implementation, and future development.
 
