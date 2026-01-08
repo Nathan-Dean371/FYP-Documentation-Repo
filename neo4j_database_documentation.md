@@ -17,6 +17,8 @@
 8. [Privacy Considerations](#privacy-considerations)
 9. [Setup Instructions](#setup-instructions)
 10. [Integration Guidelines](#integration-guidelines)
+11. [Interactive Resources](#interactive-resources)
+12. [Maintenance and Monitoring](#maintenance-and-monitoring)
 
 ---
 
@@ -481,6 +483,9 @@ FOR (a:AuditLog) ON (a.timestamp);
 
 CREATE INDEX audit_actor IF NOT EXISTS 
 FOR (a:AuditLog) ON (a.actorPseudoId);
+
+CREATE INDEX audit_entity_type IF NOT EXISTS 
+FOR (a:AuditLog) ON (a.entityType);
 ```
 
 ---
@@ -1256,6 +1261,18 @@ export class IdentityService {
   }
 }
 ```
+
+---
+
+## Interactive Resources
+
+### Visualization Tools
+
+- **[Interactive Neo4j Schema Diagram](https://nathan-dean371.github.io/FYP-Documentation-Repo/Html%20Docs/Neo4j-Schema-Interactive.html)** - Visual representation of all nodes, relationships, and properties. Use this for understanding the complete database structure at a glance and exploring how entities connect.
+
+- **[API Endpoints Documentation](https://nathan-dean371.github.io/FYP-Documentation-Repo/Html%20Docs/api_endpoints.html)** - Complete reference for all available API endpoints, including request/response examples, authentication requirements, and error handling.
+
+These interactive resources complement this documentation and provide alternative ways to explore the system architecture and API capabilities.
 
 ---
 
